@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nimuuu & Ahmed | A Love Story</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Montserrat:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --soft-rose: #ffd1dc;
+            --deep-rose: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.12);
+        }
+
+        body, html {
+            margin: 0; padding: 0; min-height: 100vh;
+            background: #0a0a0a; font-family: 'Montserrat', sans-serif;
+            color: white; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #3d0b16 0%, #0a0a0a 100%);
+            z-index: -2;
+        }
+
+        .watermark {
+            position: fixed; font-family: 'Great Vibes', cursive;
+            font-size: 8vw; color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap; pointer-events: none; z-index: -1;
+        }
+
+        .container { position: relative; z-index: 10; width: 90%; max-width: 420px; }
+
+        .romantic-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 40px; padding: 40px 30px;
+            text-align: center; border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .hidden { display: none !important; }
+
+        .profile-img {
+            width: 130px; height: 130px; border-radius: 50%;
+            object-fit: cover; border: 3px solid var(--soft-rose);
+            box-shadow: 0 0 30px rgba(255, 77, 109, 0.5); margin-bottom: 20px;
+        }
+
+        h1 { 
+            font-family: 'Cormorant Garamond', serif; font-size: 2.3rem;
+            color: var(--soft-rose); margin: 10px 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .input-elegant {
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+            padding: 16px; border-radius: 20px; width: 100%; color: white;
+            text-align: center; margin: 20px 0; outline: none; box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .btn-glow {
+            background: linear-gradient(45deg, #ff4d6d, #c9184a);
+            color: white; border: none; padding: 18px; border-radius: 50px;
+            width: 100%; font-weight: 600; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(201, 24, 74, 0.4); transition: 0.3s;
+            position: relative; z-index: 1000;
+        }
+
+        .btn-glow:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(201, 24, 74, 0.6); }
+
+        .typewriter-box {
+            font-family: 'Cormorant Garamond', serif; font-size: 1.35rem;
+            line-height: 1.6; min-height: 100px; margin: 25px 0; font-style: italic;
+        }
+        
+        .floating-heart {
+            position: fixed; pointer-events: none; z-index: 1;
+            color: var(--deep-rose); opacity: 0.6; font-size: 1.5rem;
+        }
+
+        video { width: 100%; border-radius: 20px; margin-top: 15px; background: #000; border: 1px solid rgba(255,255,255,0.1); }
+
+        #daysCount { 
+            font-size: 1.2rem; 
+            color: #fff; 
+            margin-bottom: 12px; 
+            font-weight: 600; 
+            text-shadow: 0 0 15px rgba(255, 77, 109, 0.8);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-overlay"></div>
+    <div class="watermark" id="wm">Ahmed ❤️ Nimuuu</div>
+
+    <div class="container">
+        <div id="lock-card" class="romantic-card">
+            <img src="nimu.jpeg" class="profile-img" alt="Nimuuu">
+            <h1>Hi Nimuuu...</h1>
+            <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 5px;">Enter the password</p>
+            <input type="password" id="passInput" class="input-elegant" placeholder="Hint: nimuuu">
+            <button class="btn-glow" id="unlockBtn">Unlock My Heart</button>
+        </div>
+
+        <div id="proposal-card" class="romantic-card hidden">
+            <h1>To My Queen,</h1>
+            <div id="typewriter" class="typewriter-box"></div>
+            
+            <div id="action-area" style="opacity: 0;">
+                <h2 style="font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: var(--soft-rose); margin-bottom: 20px;">Will you be mine forever?</h2>
+                <button class="btn-glow" id="yesBtn">YES, FOREVER!</button>
+                <button id="no-btn" style="background:transparent; border:none; color:rgba(255,255,255,0.3); margin-top:20px; cursor:pointer; width:100%;">Not today</button>
+            </div>
+        </div>
+
+        <div id="final-card" class="romantic-card hidden">
+            <h1 style="font-family: 'Great Vibes', cursive; font-size: 3rem;">Always & Forever</h1>
+            <div id="daysCount"></div>
+            <p style="font-style: italic; color: var(--soft-rose); margin-bottom: 15px;">"Ahmed ki duniya ab sirf tumse hai."</p>
+            <video id="celebrationVideo" loop playsinline>
+                <source src="nimuuu.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        gsap.to("#wm", { x: "40vw", duration: 15, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+        setInterval(() => {
+            const h = document.createElement('div');
+            h.className = 'floating-heart';
+            h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.bottom = '-30px';
+            document.body.appendChild(h);
+            gsap.to(h, { y: '-110vh', x: (Math.random()-0.5)*100, opacity: 0, duration: 5, onComplete: () => h.remove() });
+        }, 800);
+
+        // Counter Logic for 12 June 2025
+        function updateDays() {
+            const startDate = new Date("2025-06-12"); // <--- APNI DATE
+            const today = new Date();
+            const diff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            document.getElementById('daysCount').innerHTML = `✨ ${diff} Days of Pure Love ✨`;
+        }
+
+        document.getElementById('unlockBtn').addEventListener('click', () => {
+            if(document.getElementById('passInput').value.toLowerCase() === "nimuuu") {
+                gsap.to("#lock-card", { duration: 0.5, opacity: 0, onComplete: () => {
+                    document.getElementById('lock-card').classList.add('hidden');
+                    document.getElementById('proposal-card').classList.remove('hidden');
+                    startStory();
+                    document.getElementById('bgMusic').play();
+                }});
+            } else {
+                gsap.to("#lock-card", { x: 10, repeat: 5, yoyo: true, duration: 0.05 });
+            }
+        });
+
+        function startStory() {
+            const text = "Nimuuu, aap Ahmed ki zindagi ka wo haseen hissa ho jiske bina sab adhoora hai. Aapki tareef ke liye alfaaz kam hain, par mera ishq kaafi hai. Kya aap hamesha ke liye meri banogi?";
+            let i = 0;
+            const target = document.getElementById("typewriter");
+            function type() {
+                if (i < text.length) {
+                    target.innerHTML += text.charAt(i); i++;
+                    setTimeout(type, 50);
+                } else {
+                    gsap.to("#action-area", { opacity: 1, duration: 1 });
+                }
+            }
+            type();
+        }
+
+        document.getElementById('yesBtn').addEventListener('click', function() {
+            // Confetti
+            const end = Date.now() + 3000;
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d6d', '#ffd1dc'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d6d', '#ffd1dc'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+            gsap.to("#proposal-card", { duration: 0.5, opacity: 0, onComplete: () => {
+                document.getElementById('proposal-card').classList.add('hidden');
+                document.getElementById('final-card').classList.remove('hidden');
+                updateDays();
+                gsap.from("#final-card", { opacity: 0, scale: 0.8, duration: 1 });
+                document.getElementById('celebrationVideo').play();
+            }});
+        });
+
+        const noBtn = document.getElementById('no-btn');
+        noBtn.addEventListener('mouseenter', () => {
+            gsap.to(noBtn, { x: (Math.random()-0.5)*300, y: (Math.random()-0.5)*300, duration: 0.2 });
+        });
+    </script>
+</body>
+</html>
